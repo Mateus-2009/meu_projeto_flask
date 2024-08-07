@@ -10,7 +10,6 @@ app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
 
-
 class Livro(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     titulo = db.Column(db.String(200), nullable=False)
@@ -30,12 +29,12 @@ class Livro(db.Model):
 
     def __repr__(self):
         return f"<Livro {self.titulo}>"
-    
+
 with app.app_context():
     db.create_all()
 
     # Ler o arquivo CSV para um DataFrame
-    df = pd.read_csv("tabela - livros.csv")
+    df = pd.read_csv("tabela_livros.csv")
 
     # Adicionar cada livro à base de dados, se ainda não estiverem presentes
     for index, row in df.iterrows():
@@ -69,10 +68,16 @@ def criar():
     autor = request.form["autor"]
     categoria = request.form["categoria"]
     ano = request.form["ano"]
-    editora = request.form["editora"]
+    editora = request.form.get("editora", "Sem Editora")  # Valor padrão se não fornecido
+    ativo = request.form.get("ativo") == "on"  # Supondo que o campo ativo seja um checkbox
+
+    try:
+        ano = int(ano)  # Garantir que o ano seja um número
+    except ValueError:
+        return "O ano deve ser um número válido!", 400
 
     livro = Livro(
-        titulo=titulo, autor=autor, categoria=categoria, ano=ano, editora=editora
+        titulo=titulo, autor=autor, categoria=categoria, ano=ano, editora=editora, ativo=ativo
     )
 
     db.session.add(livro)
@@ -82,3 +87,4 @@ def criar():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
