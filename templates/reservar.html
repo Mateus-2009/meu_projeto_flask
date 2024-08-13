@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
+    <title>Reservar Livro</title>
+  </head>
+  <body>
+    <div class="container mt-5">
+      <h2>Lista de Livros para Reserva</h2>
+      <ul class="list-group">
+        {% for livro in livros %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          {{ livro.titulo }} - {{ livro.autor }}
+          <a href="{{ url_for('fazer_reserva', book_id=livro.id) }}" class="btn btn-primary">Reservar</a>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </body>
+</html>
