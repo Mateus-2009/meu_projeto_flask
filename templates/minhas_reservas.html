@@ -12,8 +12,8 @@
       <ul class="list-group">
         {% for reserva in reservas %}
         <li class="list-group-item d-flex justify-content-between align-items-center">
-          Livro ID: {{ reserva.book_id }} - Data da Reserva: {{ reserva.date_reserved.strftime('%d/%m/%Y %H:%M') }}
-          <!-- Adicionar mais detalhes sobre o livro se necessário -->
+          Livro ID: {{ reserva.book_id }} - Data da Reserva: {{ reserva.date_reserved }}
+          <!-- Aqui você pode adicionar mais detalhes, como o título do livro, usando uma consulta adicional -->
         </li>
         {% endfor %}
       </ul>

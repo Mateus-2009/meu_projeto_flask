@@ -1,9 +1,10 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 import pandas as pd
 from datetime import datetime
+from cotacoes import get_currency_rates
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "sua_chave_secreta"  # Substitua por uma chave secreta segura
@@ -210,6 +211,16 @@ def fazer_reserva(book_id):
 def minhas_reservas():
     reservas = Reservation.query.filter_by(user_id=current_user.id).all()
     return render_template("minhas_reservas.html", reservas=reservas)
+
+# Rota para renderizar a página de cotações
+@app.route('/cotacoes')
+def cotacoes():
+    return render_template('cotacoes.html')
+
+# Rota para fornecer as cotações em formato JSON
+@app.route('/rates')
+def rates():
+    return jsonify(get_currency_rates())
 
 if __name__ == "__main__":
     app.run(debug=True)
